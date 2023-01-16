@@ -4,13 +4,17 @@ test.cpp is source file for testing features
 
 #include <stdio.h>
 #include <fstream>
-#include "utils.hpp"
+#include "runners/steam.hpp"
 
 int main()
 {
-  auto w = utils::sys::which("zssh");
-  if (w.exists)
-    printf("%s",w.path.c_str());
+  // Steam *steam = new Steam();
+  // if (steam->getSteamSource() == STEAM_SOURCE_FLATPAK)
+  //   printf("FLATPAK\n");
+  // printf("%d\n",steam->getSteamSource());
+  auto x=utils::sys::which("zsh");
+  if (x.exists)
+    printf("%s\n",x.path.c_str());
 
   return 0;
 }

@@ -20,7 +20,7 @@ std::vector<std::string> utils::string::split(std::string str, char splitc)
   return result;
 }
 
-std::string utils::string::rm_dubs(std::string str)
+std::string utils::string::rmDubs(std::string str)
 {
   std::string result;
   {
@@ -36,9 +36,7 @@ std::string utils::string::rm_dubs(std::string str)
   }
   return result;
 }
-
-
-std::string utils::string::rm_dubs(std::string str, char dubc)
+std::string utils::string::rmDubs(std::string str, char dubc)
 {
   std::string result;
     
@@ -61,7 +59,7 @@ std::string utils::string::rm_dubs(std::string str, char dubc)
 }
 
 
-std::vector<std::string> utils::fs::listdir(std::string path)
+std::vector<std::string> utils::fs::listDir(std::string path)
 {
   std::vector<std::string> lst;
     
@@ -82,31 +80,37 @@ std::vector<std::string> utils::fs::listdir(std::string path)
   return lst;
 }
 
-std::string utils::fs::readfile(std::string path)
+std::string utils::fs::readFile(std::string path)
 {
-  std::string filecontent;
+  std::string fileContent;
   std::string buf;
   std::ifstream f (path.c_str());
   while (!f.eof())
   {
     buf = f.get();
-    filecontent += buf;
+    fileContent += buf;
   }
   f.close();
 
-  return filecontent;
+  return fileContent;
 }
 
 
 utils::sys::_which utils::sys::which(std::string bin)
 {
-  auto status = subprocess::Popen(std::string("which " + bin).c_str(),subprocess::output{subprocess::PIPE});
-  if (status.wait() == 0)
+  utils::sys::_which w;
+  for (std::string binPath : binDirs )
   {
-    return utils::sys::_which{std::string(status.communicate().first.buf.data()),true};
-  } else {
-    return utils::sys::_which{"",false};
+    // for (std::string binFile : utils::fs::listDir(binPath))
+    // {
+    //   if (binFile == bin)
+    //   {
+    //     w.path = std::string(binPath+'/'+binFile);
+    //     w.exists = true;
+    //   }
+    // }
   }
+  return w;
 }
 
 
