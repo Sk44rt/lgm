@@ -8,13 +8,15 @@ test.cpp is source file for testing features
 
 int main()
 {
-  // Steam *steam = new Steam();
-  // if (steam->getSteamSource() == STEAM_SOURCE_FLATPAK)
-  //   printf("FLATPAK\n");
-  // printf("%d\n",steam->getSteamSource());
-  auto x=utils::sys::which("zsh");
-  if (x.exists)
-    printf("%s\n",x.path.c_str());
-
+  Steam *steam = new Steam();
+  for (auto app : steam->getAppIds())
+    if (app.isDownloaded) printf("%s: %d\n", app.name.c_str(), app.id);
+  printf("select your game (write appid): ");
+  static char input[10];
+  scanf("%s",input);
+  // printf("%s\n",input);
+  int gameId = utils::string::toDigit(std::string(input));
+  int status = steam->run(gameId);
+  
   return 0;
 }

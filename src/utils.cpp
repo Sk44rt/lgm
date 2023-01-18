@@ -20,6 +20,15 @@ std::vector<std::string> utils::string::split(std::string str, char splitc)
   return result;
 }
 
+int utils::string::toDigit(std::string str)
+{
+  std::string digit;
+  for (char c : str)
+    if (std::string("1234567890").find(c) != std::string::npos)
+      digit.push_back(c);
+  return std::stoi(digit);
+}
+
 std::string utils::string::rmDubs(std::string str)
 {
   std::string result;
@@ -101,14 +110,14 @@ utils::sys::_which utils::sys::which(std::string bin)
   utils::sys::_which w;
   for (std::string binPath : binDirs )
   {
-    // for (std::string binFile : utils::fs::listDir(binPath))
-    // {
-    //   if (binFile == bin)
-    //   {
-    //     w.path = std::string(binPath+'/'+binFile);
-    //     w.exists = true;
-    //   }
-    // }
+    auto x = utils::fs::listDir(binPath);
+    if (std::find(x.begin(),x.end(),bin) != x.end())
+    {
+      w.path = std::string(binPath+"/"+bin);
+      w.exists = true;
+
+      return w;
+    }
   }
   return w;
 }

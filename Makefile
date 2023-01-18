@@ -8,10 +8,12 @@ HEADERS = ./headers
 HELPERS = ./helpers
 CFLAGS += -I$(HELPERS) -I$(HEADERS) -lpthread
 
-TESTING = nothing
+# set TESTING to null for release build
+# e.g. "TESTING = "
+TESTING = debug
 
 SOURCES = $(SRC)/utils.cpp $(RUNNERS_SRC)/steam.cpp
-ifdef TESTING
+ifeq ($(TESTING),debug)
 	SOURCES += $(SRC)/test.cpp
 else
 	SOURCES += $(SRC)/main.cpp

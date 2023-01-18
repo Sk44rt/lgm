@@ -7,6 +7,7 @@
 #include <regex>
 #include <fstream>
 #include <sys/stat.h>
+#include <algorithm>
 
 #include "subprocess.hpp"
 
@@ -15,7 +16,7 @@
 
 /*
   used in utils::sys::which()
-  i took this list from whereis util source code
+  i took this array from whereis util source code
   see: https://github.com/util-linux/util-linux/
   whereis source: https://github.com/util-linux/util-linux/blob/master/misc-utils/whereis.c
 */
@@ -36,7 +37,6 @@ const std::vector<std::string> binDirs = {
   "/usr/games/bin",
   "/usr/games/lib",
   "/usr/emacs/etc",
-  "/usr/lib/emacs/*/etc",
   "/usr/TeX/bin",
   "/usr/tex/bin",
   "/usr/interviews/bin/LINUX",
@@ -73,11 +73,9 @@ namespace utils
   namespace string
   {
     std::vector<std::string> split(std::string str, char splitc);
+    int toDigit(std::string str);
     std::string rmDubs(std::string str);
     std::string rmDubs(std::string str, char dubc);
-  }
-  namespace vector
-  {
   }
   namespace fs
   {
