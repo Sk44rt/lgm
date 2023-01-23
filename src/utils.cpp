@@ -1,5 +1,6 @@
 #include "utils.hpp"
 
+// string utilities
 std::vector<std::string> utils::string::split(std::string str, char splitc)
 {
   std::vector<std::string> result;
@@ -20,7 +21,23 @@ std::vector<std::string> utils::string::split(std::string str, char splitc)
   return result;
 }
 
-int utils::string::toDigit(std::string str)
+std::string utils::string::strip(std::string str)
+{
+  return strip(str, ' ');
+}
+std::string utils::string::strip(std::string str, char _char)
+{
+  if (str.size() == 0) return str;
+  std::string result = str;
+  while (result[0]==_char||result[result.size()-1]==_char)
+  {
+    if (result[0]==_char) result.erase(result.begin());
+    if (result[result.size()-1]==_char) result.erase(result.begin()+(result.size()-1));
+  }
+  return result;
+}
+
+int utils::string::getDigits(std::string str)
 {
   std::string digit;
   for (char c : str)
@@ -29,7 +46,7 @@ int utils::string::toDigit(std::string str)
   return std::stoi(digit);
 }
 
-std::string utils::string::rmDubs(std::string str)
+std::string utils::string::removeDublicates(std::string str)
 {
   std::string result;
   {
@@ -45,7 +62,7 @@ std::string utils::string::rmDubs(std::string str)
   }
   return result;
 }
-std::string utils::string::rmDubs(std::string str, char dubc)
+std::string utils::string::removeDublicates(std::string str, char dubc)
 {
   std::string result;
     
@@ -67,6 +84,45 @@ std::string utils::string::rmDubs(std::string str, char dubc)
   return result;    
 }
 
+std::string utils::string::remove(std::string str, char _char)
+{
+  std::string result;
+  for (char c : str)
+  {
+    if (c == _char) continue;
+    result += c;
+  }
+  return result;
+}
+
+std::string utils::string::join(std::vector<std::string> strs, char joinChar, bool removeFirst)
+{
+  std::string result;
+  for (std::string str : strs)
+  {
+    str = utils::string::strip(
+            utils::string::removeDublicates(
+              utils::string::remove(str, ' '),
+              joinChar),
+            joinChar
+          );
+    if(str[0]!=joinChar&&result[result.size()-1]!=joinChar)result+=joinChar;
+    result+=str;
+    if(str[str.size()-1]!=joinChar)result+=joinChar;
+  }
+  { // remove first and last characters
+    if (removeFirst) result.erase(result.begin());
+    result.erase(result.begin() + result.size() - 1);
+  }
+  return result;
+}
+
+
+// fs (file system) utilities
+std::string utils::fs::joinPath(std::vector<std::string> v)
+{
+  return utils::string::join(v, '/', false);
+}
 
 std::vector<std::string> utils::fs::listDir(std::string path)
 {
@@ -105,6 +161,7 @@ std::string utils::fs::readFile(std::string path)
 }
 
 
+// system utilities
 utils::sys::_which utils::sys::which(std::string bin)
 {
   utils::sys::_which w;
@@ -120,6 +177,26 @@ utils::sys::_which utils::sys::which(std::string bin)
     }
   }
   return w;
+}
+
+std::vector<std::string> utils::sys::getOutput(std::string cmd, int cuttedLines)
+{
+  std::vector<std::string> result = utils::string::split(
+    std::string(
+      subprocess::Popen(cmd, subprocess::output{subprocess::PIPE}).communicate().first.buf.data()
+    ),
+    '\n'
+  );
+
+  if (cuttedLines > 0) result.erase(result.begin(),result.begin()+cuttedLines);
+
+  return result;
+}
+
+std::string utils::sys::getEnv(std::string var)
+{
+  // get environment variable
+  return std::string(std::getenv(var.c_str()));
 }
 
 

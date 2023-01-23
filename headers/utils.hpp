@@ -1,14 +1,7 @@
 #ifndef UTILS_HPP_
 #define UTILS_HPP_
 
-#include <string>
-#include <vector>
-#include <dirent.h>
-#include <regex>
-#include <fstream>
-#include <sys/stat.h>
-#include <algorithm>
-
+#include "includes.hpp"
 #include "subprocess.hpp"
 
 #define MKDIR_PATH_EXISTS -1
@@ -17,8 +10,7 @@
 /*
   used in utils::sys::which()
   i took this array from whereis util source code
-  see: https://github.com/util-linux/util-linux/
-  whereis source: https://github.com/util-linux/util-linux/blob/master/misc-utils/whereis.c
+  see: https://github.com/util-linux/util-linux/blob/master/misc-utils/whereis.c
 */
 const std::vector<std::string> binDirs = {
   "/usr/bin",
@@ -73,12 +65,21 @@ namespace utils
   namespace string
   {
     std::vector<std::string> split(std::string str, char splitc);
-    int toDigit(std::string str);
-    std::string rmDubs(std::string str);
-    std::string rmDubs(std::string str, char dubc);
+    std::string strip(std::string str);
+    std::string strip(std::string str, char _char);
+    int getDigits(std::string str);
+    std::string removeDublicates(std::string str);
+    std::string removeDublicates(std::string str, char dubc);
+    std::string remove(std::string str, char _char);
+    std::string join(std::vector<std::string> strs, char joinChar, bool removeFirst);
+  }
+  namespace vector
+  {
+    template <class T> bool exists(std::vector<T> array, T element) { return std::find(array.begin(),array.end(),element) != array.end(); }
   }
   namespace fs
   {
+    std::string joinPath(std::vector<std::string> v);
     std::vector<std::string> listDir(std::string path);
     std::string readFile(std::string path);
   }
@@ -90,6 +91,8 @@ namespace utils
       bool exists = false;
     };
     utils::sys::_which which(std::string bin);
+    std::vector<std::string> getOutput(std::string cmd, int cuttedLines); // cuttedLines is value for return command output without n first lines
+    std::string getEnv(std::string var);
   }
   namespace regex
   {

@@ -8,15 +8,7 @@ test.cpp is source file for testing features
 
 int main()
 {
-  Steam *steam = new Steam();
-  for (auto app : steam->getAppIds())
-    if (app.isDownloaded) printf("%s: %d\n", app.name.c_str(), app.id);
-  printf("select your game (write appid): ");
-  static char input[10];
-  scanf("%s",input);
-  // printf("%s\n",input);
-  int gameId = utils::string::toDigit(std::string(input));
-  int status = steam->run(gameId);
-  
+  printf("%s\n", utils::string::remove(" 123   4 56  7    8 9    ", ' ').c_str());
+
   return 0;
 }

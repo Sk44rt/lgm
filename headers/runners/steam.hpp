@@ -1,9 +1,11 @@
-#include <string>
-#include <vector>
-#include "utils.hpp"
+#ifndef _STEAM_HPP
+#define _STEAM_HPP
+
+#include "pm.hpp"
 #include "acf.hpp"
 #include "json.hpp"
 
+#define STEAM_NOT_INSTALLED -1
 #define STEAM_SOURCE_NATIVE 0
 #define STEAM_SOURCE_SNAP 1
 #define STEAM_SOURCE_FLATPAK 2
@@ -35,3 +37,5 @@ private:
   void checkAppIds();
   void checkSteamSource();
 };
+
+#endif
