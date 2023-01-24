@@ -49,7 +49,7 @@ void Steam::checkSteamSource()
   else if (pm::flatpak::isInstalled() && pm::flatpak::pkgInstalled("com.valvesoftware.Steam"))
   {
     this->steamSource = STEAM_SOURCE_FLATPAK;
-    this->steamPath = "/home/sk4rt/.var/app/com.valvesoftware.Steam/data/Steam";
+    this->steamPath = utils::fs::joinPath({utils::sys::getEnv("HOME"), "/.var/app/com.valvesoftware.Steam/data/Steam"});
   }
   else
   {
