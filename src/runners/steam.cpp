@@ -71,7 +71,7 @@ int Steam::run(int id)
 {
   std::string command;
   if (this->steamSource == STEAM_SOURCE_FLATPAK)
-    command += std::string("bash ") + std::string(utils::fs::joinPath({utils::sys::getEnv("HOME"),"code/lgm/scripts/steamrun.sh"})) + std::string(" ") + std::to_string(id);
+    command = utils::string::join(std::string("bash") std::string(utils::fs::joinPath({utils::sys::getEnv("HOME"),"code/lgm/scripts/steamrun.sh"})), std::to_string(id)}, ' ');
   printf("%s\n",command.c_str());
 
   return subprocess::Popen(command).wait();
